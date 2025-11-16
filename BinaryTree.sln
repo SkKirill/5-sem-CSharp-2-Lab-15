@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solutioon", "Solutioon.csproj", "{B800D165-8448-4490-96D1-6F3E75A03883}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tree", "Tree.csproj", "{B800D165-8448-4490-96D1-6F3E75A03883}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
