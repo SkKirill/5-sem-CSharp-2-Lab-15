@@ -1,4 +1,4 @@
-﻿namespace Tree.Tree;
+﻿namespace TreeLibrary.Trees;
 
 public interface ITree<T> : IEnumerable<T>
 {

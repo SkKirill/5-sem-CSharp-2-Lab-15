@@ -6,8 +6,7 @@
         <LangVersion>14</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>Tree</AssemblyName>
-        <RootNamespace>Tree</RootNamespace>
+        <PackageId>TreeLibrary</PackageId>
     </PropertyGroup>
 
 </Project>

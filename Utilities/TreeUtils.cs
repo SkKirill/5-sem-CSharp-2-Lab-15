@@ -1,7 +1,7 @@
-﻿using Tree.Exceptions;
-using Tree.Tree;
+﻿using TreeLibrary.Exceptions;
+using TreeLibrary.Trees;
 
-namespace Tree;
+namespace TreeLibrary.Utilities;
 
 /// <summary>
 /// Делегат проверки элемента дерева.

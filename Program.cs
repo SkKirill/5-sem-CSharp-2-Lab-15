@@ -1,4 +1,4 @@
-﻿namespace Tree;
+﻿namespace TreeLibrary;
 
 internal static class Program
 {

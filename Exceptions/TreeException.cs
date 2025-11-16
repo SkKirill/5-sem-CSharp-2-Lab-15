@@ -1,4 +1,4 @@
-﻿namespace Tree.Exceptions;
+﻿namespace TreeLibrary.Exceptions;
 
 public class TreeException(string message = "Произошла ошибка при работе с деревом.") : Exception(message);
 

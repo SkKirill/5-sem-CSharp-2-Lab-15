@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 
-namespace Tree.Tree;
+namespace TreeLibrary.Trees;
 
-public class ArrayTree<T> : ITree<T>
+public class UnmutableTree<T> : ITree<T>
 {
     public IEnumerator<T> GetEnumerator()
     {
@@ -17,6 +17,7 @@ public class ArrayTree<T> : ITree<T>
     public int Count { get; }
     public bool IsEmpty { get; }
     public IEnumerable<T> Nodes { get; set; }
+    
     public void Add(T item)
     {
         throw new NotImplementedException();

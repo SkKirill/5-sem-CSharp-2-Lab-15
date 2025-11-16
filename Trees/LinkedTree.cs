@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Tree.Tree;
+namespace TreeLibrary.Trees;
 
 public class LinkedTree<T> : ITree<T>
 {

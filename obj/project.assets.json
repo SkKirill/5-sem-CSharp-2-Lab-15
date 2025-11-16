@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "T:\\VSU\\5-sem\\CSharp\\2-lab\\15\\BinaryTree\\Tree.csproj",
+      "projectUniqueName": "T:\\VSU\\5-sem\\CSharp\\2-lab\\15\\BinaryTree\\TreeLibrary.csproj",
       "projectName": "Tree",
-      "projectPath": "T:\\VSU\\5-sem\\CSharp\\2-lab\\15\\BinaryTree\\Tree.csproj",
+      "projectPath": "T:\\VSU\\5-sem\\CSharp\\2-lab\\15\\BinaryTree\\TreeLibrary.csproj",
       "packagesPath": "C:\\Users\\kirux\\.nuget\\packages\\",
       "outputPath": "T:\\VSU\\5-sem\\CSharp\\2-lab\\15\\BinaryTree\\obj\\",
       "projectStyle": "PackageReference",
