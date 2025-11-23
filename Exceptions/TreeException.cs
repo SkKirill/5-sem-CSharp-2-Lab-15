@@ -13,3 +13,7 @@ public class TreeItemNotFoundException(string message = "Указанный эл
 
 public class TreeInvalidOperationException(string message = "Некорректная операция над деревом.")
     : TreeException(message);
+
+public class TreeDuplicateValueException(
+    string message = "Нельзя вставлять в бинарное дерево значение, которое в нем уже есть")
+    : TreeException(message);

@@ -4,7 +4,7 @@ public interface ITree<T> : IEnumerable<T>
 {
     int Count { get; }
     bool IsEmpty { get; }
-    IEnumerable<T> Nodes { get; set; }
+    IEnumerable<T> Nodes { get; }
 
     void Add(T item);
     void Clear();
