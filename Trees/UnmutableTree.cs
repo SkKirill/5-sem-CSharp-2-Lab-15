@@ -1,45 +1,45 @@
 ﻿using System.Collections;
+using TreeLibrary.Exceptions;
 
 namespace TreeLibrary.Trees;
 
-public class UnmutableTree<T> : ITree<T>
+public class UnmutableTree<T>(ITree<T> tree) : ITree<T> where T : IComparable<T>
 {
-    public IEnumerator<T> GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
+    public int Count => tree.Count;
+    public bool IsEmpty => tree.IsEmpty;
+    public IEnumerable<T> Nodes => tree;
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public void Add(T node)
     {
-        return GetEnumerator();
-    }
-
-    public int Count { get; }
-    public bool IsEmpty { get; }
-    public IEnumerable<T> Nodes { get; set; }
-    
-    public void Add(T item)
-    {
-        throw new NotImplementedException();
+        throw new TreeUnmutableException();
     }
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        throw new TreeUnmutableException();
     }
 
-    public bool Contains(T item)
+    public bool Contains(T node)
     {
-        throw new NotImplementedException();
+        return tree.Contains(node);
     }
 
-    public bool Contains(ITree<T> tree)
+    public bool Contains(ITree<T> tree1)
     {
-        throw new NotImplementedException();
+        return tree.Contains(tree1);
     }
 
-    public void Remove(T item)
+    public void Remove(T node)
     {
-        throw new NotImplementedException();
+        throw new TreeUnmutableException();
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return tree.GetEnumerator();
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

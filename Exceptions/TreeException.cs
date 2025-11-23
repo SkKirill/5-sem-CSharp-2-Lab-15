@@ -17,3 +17,5 @@ public class TreeInvalidOperationException(string message = "Некоррект�
 public class TreeDuplicateValueException(
     string message = "Нельзя вставлять в бинарное дерево значение, которое в нем уже есть")
     : TreeException(message);
+
+public class TreeUnmutableException(string message = "Функция недоступна.") : TreeException(message);
