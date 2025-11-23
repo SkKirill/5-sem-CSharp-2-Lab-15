@@ -15,36 +15,13 @@ internal static class Program
         // Тест ArrayTree
         var arrayTree = new ArrayTree<IntClassTester>();
         TreeTester.RunTests(arrayTree, sampleData);
+        arrayTree = new ArrayTree<IntClassTester> { new(1), new(2), new(3), new(4), new(5) };
         TreeTester.RunTestsWithImmutable(arrayTree);
 
         // Тест LinkedTree
         var linkedTree = new LinkedTree<IntClassTester>();
         TreeTester.RunTests(linkedTree, sampleData);
+        linkedTree = new LinkedTree<IntClassTester> { new(1), new(2), new(3), new(4), new(5) };
         TreeTester.RunTestsWithImmutable(linkedTree);
-    }
-
-    private class IntClassTester : IComparable<IntClassTester>
-    {
-        private int Value { get; }
-
-        public IntClassTester(int value)
-        {
-            Value = value;
-        }
-
-        public int CompareTo(IntClassTester? other)
-        {
-            if (other == null)
-            {
-                return -1;
-            }
-            
-            return other.Value - Value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
     }
 }

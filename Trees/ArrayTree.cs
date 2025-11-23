@@ -15,7 +15,21 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
     private T?[] _array = new T?[4];
     public int Count { get; private set; }
     public bool IsEmpty => Count == 0;
-    public IEnumerable<T> Nodes => _array;
+    public IEnumerable<T> Nodes
+    {
+        get
+        {
+            var list = new List<T>();
+            foreach (var node in _array)
+            {
+                if (node is not null)
+                {
+                    list.Add(node);
+                }
+            }
+            return list;
+        }
+    }
 
     public void Add(T item)
     {
@@ -83,9 +97,9 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
             throw new TreeNullException();
 
         var index = 0;
-        var cmp = item.CompareTo(_array[index]);
         while (index < _array.Length)
         {
+            var cmp = item.CompareTo(_array[index]);
             if (Equals(_array[index], null))
                 return false;
 
