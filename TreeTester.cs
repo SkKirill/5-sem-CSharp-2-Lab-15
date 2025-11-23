@@ -47,30 +47,38 @@ public static class TreeTester
         if (sampleData is IList<T> list)
         {
             ExecuteCommand(tree, $"Remove({list[0]})", t => t.Remove(list[0]));
+            ExecuteCommand(tree, $"Remove({testItem})", t => t.Remove(testItem));
         }
 
         // 4. Проверка утилит TreeUtils
-        ExecuteCommand(tree, "TreeUtils.Exists(x => true)", t =>
+        ExecuteCommand(tree, "TreeUtils.Exists(x => x.CompareTo(testItem) > 0)", t =>
         {
-            var any = TreeUtils<T>.Exists(t, x => true);
+            var any = TreeUtils<T>.Exists(t, x => x.CompareTo(testItem) > 0);
             Console.WriteLine($"TreeUtils.Exists = {any}");
         });
 
-        ExecuteCommand(tree, "TreeUtils.CheckForAll(x => true)", t =>
+        ExecuteCommand(tree, "TreeUtils.CheckForAll(x => x.CompareTo(testItem) > 0)", t =>
         {
-            var all = TreeUtils<T>.CheckForAll(t, x => true);
+            var all = TreeUtils<T>.CheckForAll(t, x => x.CompareTo(testItem) > 0);
             Console.WriteLine($"TreeUtils.CheckForAll = {all}");
         });
 
-        ExecuteCommand(tree, "TreeUtils.FindAll(x => true)", t =>
+        ExecuteCommand(tree, "TreeUtils.FindAll(x => x.CompareTo(testItem) > 0)", t =>
         {
-            var filtered = TreeUtils<T>.FindAll(t, x => true);
+            var filtered = TreeUtils<T>.FindAll(t, x => x.CompareTo(testItem) > 0);
             Console.WriteLine("TreeUtils.FindAll создало дерево:");
             PrintTree(filtered);
         });
 
-        ExecuteCommand(tree, "TreeUtils.ForEach(x => Console.WriteLine(x))",
-            t => { TreeUtils<T>.ForEach(t, x => Console.WriteLine($"Элемент: {x}")); });
+        ExecuteCommand(tree, "TreeUtils.ForEach(x => if (x.CompareTo(testItem) > 0))",
+            t =>
+            {
+                TreeUtils<T>.ForEach(t, x =>
+                {
+                    if (x.CompareTo(testItem) > 0)
+                        Console.WriteLine($"Элемент: {x} больше {testItem}");
+                });
+            });
 
         // 5. Очистка дерева
         ExecuteCommand(tree, "Clear", t => t.Clear());
@@ -81,10 +89,12 @@ public static class TreeTester
     /// </summary>
     public static void RunTestsWithImmutable<T>(ITree<T> baseTree) where T : IComparable<T>, new()
     {
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine(new string('=', 60));
-        Console.WriteLine("Тестирование замороженного дерева (UnmutableTree)");
+        Console.WriteLine("Тестирование неизменяемого дерева (UnmutableTree)");
         Console.WriteLine(new string('=', 60));
         Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Gray;
 
         var immutableTree = new UnmutableTree<T>(baseTree);
         RunTests(immutableTree, baseTree.Nodes);
@@ -97,7 +107,10 @@ public static class TreeTester
         where T : IComparable<T>
     {
         Console.WriteLine(new string('-', 60));
-        Console.WriteLine($"Попытка выполнить команду: {commandName}");
+        Console.Write($"Попытка выполнить команду: ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"{commandName}");
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.Write($"Тип дерева: ");
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine($"{tree.GetType().Name}");

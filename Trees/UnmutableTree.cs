@@ -9,7 +9,7 @@ public class UnmutableTree<T> : ITree<T> where T : IComparable<T>
     
     public int Count => _tree.Count;
     public bool IsEmpty => _tree.IsEmpty;
-    public IEnumerable<T> Nodes => _tree;
+    public IEnumerable<T> Nodes => _tree.Nodes;
 
     public UnmutableTree(ITree<T> tree)
     {

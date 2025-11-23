@@ -150,6 +150,12 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
                 case 0:
                     _array[index] = default;
                     Count--;
+                    var rebase = new List<T>();
+                    CutBranch(ref rebase, index);
+                    foreach (var node in rebase)
+                    {
+                        Add(node);
+                    }
                     return;
                 case < 0:
                     index = 2 * index + 1;
@@ -180,6 +186,23 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
         return GetEnumerator();
     }
 
+    private void CutBranch(ref List<T> list, int index)
+    {
+        if (2 * index + 1 < Count && _array[2 * index + 1] is not null)
+        {
+            list.Add(_array[2 * index + 1]!);
+            _array[2 * index + 1] = default;
+            CutBranch(ref list, 2 * index + 1);
+        }
+
+        if (2 * index + 2 < Count && _array[2 * index + 1] is not null)
+        {
+            list.Add(_array[2 * index + 2]!);
+            _array[2 * index + 2] = default;
+            CutBranch(ref list, 2 * index + 2);
+        }
+    }
+    
     private void EnsureCapacity(int index)
     {
         if (index < _array.Length)

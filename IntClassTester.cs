@@ -11,7 +11,7 @@ public class IntClassTester : IComparable<IntClassTester>
     }
     public IntClassTester()
     {
-        Value = Random.Shared.Next();
+        Value = Random.Shared.Next(6, 15);
     }
 
     public int CompareTo(IntClassTester? other)
