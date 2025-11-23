@@ -20,13 +20,13 @@ public delegate void ActionDelegate<in T>(T item);
 /// Делегат, создающий новый экземпляр дерева.
 /// </summary>
 /// <typeparam name="T">Тип элементов дерева.</typeparam>
-public delegate ITree<T> TreeConstructorDelegate<T>();
+public delegate ITree<T> TreeConstructorDelegate<T>() where T : IComparable<T>;
 
 /// <summary>
 /// Набор вспомогательных операций над деревьями.
 /// Содержит методы поиска, фильтрации и обхода.
 /// </summary>
-public static class TreeUtils<T>
+public static class TreeUtils<T> where T : IComparable<T>
 {
     /// <summary>
     /// Конструктор для массива-дерева.

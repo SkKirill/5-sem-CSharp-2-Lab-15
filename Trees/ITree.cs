@@ -1,6 +1,6 @@
 ﻿namespace TreeLibrary.Trees;
 
-public interface ITree<T> : IEnumerable<T>
+public interface ITree<T> : IEnumerable<T> where T : IComparable<T>
 {
     int Count { get; }
     bool IsEmpty { get; }
