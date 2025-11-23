@@ -1,0 +1,119 @@
+﻿using TreeLibrary.Trees;
+using TreeLibrary.Utilities;
+
+namespace TreeLibrary;
+
+public static class TreeTester
+{
+    /// <summary>
+    /// Метод выполняет команду над деревом, логируя процесс и результат.
+    /// </summary>
+    private static void ExecuteCommand<T>(ITree<T> tree, string commandName, Action<ITree<T>> action) where T : IComparable<T>
+    {
+        Console.WriteLine(new string('-', 60));
+        Console.WriteLine($"Попытка выполнить команду: {commandName}");
+        Console.WriteLine($"Тип дерева: {tree.GetType().Name}");
+        Console.WriteLine("Состояние дерева ДО выполнения:");
+        PrintTree(tree);
+
+        try
+        {
+            action(tree);
+            Console.WriteLine($"Команда '{commandName}' выполнена успешно!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Обработана ошибка при выполнении '{commandName}': {ex.Message}");
+        }
+
+        Console.WriteLine("Состояние дерева ПОСЛЕ выполнения:");
+        PrintTree(tree);
+        Console.WriteLine(new string('-', 60));
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// Печатает элементы дерева.
+    /// </summary>
+    private static void PrintTree<T>(ITree<T> tree) where T : IComparable<T>
+    {
+        if (tree.IsEmpty)
+        {
+            Console.WriteLine("[Дерево пустое]");
+        }
+        else
+        {
+            Console.WriteLine($"Элементы ({tree.Count} шт.): {string.Join(", ", tree.Nodes)}");
+        }
+    }
+
+    /// <summary>
+    /// Метод запускает полный набор тестов для конкретного дерева.
+    /// </summary>
+    public static void RunTests<T>(ITree<T> tree, IEnumerable<T> sampleData) where T : IComparable<T>
+    {
+        Console.WriteLine(new string('=', 60));
+        Console.WriteLine($"Запуск тестов для дерева: {tree.GetType().Name}");
+        Console.WriteLine(new string('=', 60));
+        Console.WriteLine();
+
+        // 1. Добавление элементов
+        foreach (var item in sampleData)
+        {
+            ExecuteCommand(tree, $"Add({item})", t => t.Add(item));
+        }
+
+        // 2. Проверка Contains
+        foreach (var item in sampleData)
+        {
+            ExecuteCommand(tree, $"Contains({item})", t => {
+                bool exists = t.Contains(item);
+                Console.WriteLine($"Contains({item}) = {exists}");
+            });
+        }
+
+        // 3. Удаление элементов
+        if (sampleData is IList<T> list)
+        {
+            ExecuteCommand(tree, $"Remove({list[0]})", t => t.Remove(list[0]));
+        }
+
+        // 4. Проверка утилит TreeUtils
+        ExecuteCommand(tree, "TreeUtils.Exists(x => true)", t => {
+            bool any = TreeUtils<T>.Exists(t, x => true);
+            Console.WriteLine($"TreeUtils.Exists = {any}");
+        });
+
+        ExecuteCommand(tree, "TreeUtils.CheckForAll(x => true)", t => {
+            bool all = TreeUtils<T>.CheckForAll(t, x => true);
+            Console.WriteLine($"TreeUtils.CheckForAll = {all}");
+        });
+
+        ExecuteCommand(tree, "TreeUtils.FindAll(x => true)", t => {
+            var filtered = TreeUtils<T>.FindAll(t, x => true);
+            Console.WriteLine("TreeUtils.FindAll создало дерево:");
+            PrintTree(filtered);
+        });
+
+        ExecuteCommand(tree, "TreeUtils.ForEach(x => Console.WriteLine(x))", t => {
+            TreeUtils<T>.ForEach(t, x => Console.WriteLine($"Элемент: {x}"));
+        });
+
+        // 5. Очистка дерева
+        ExecuteCommand(tree, "Clear", t => t.Clear());
+    }
+
+    /// <summary>
+    /// Метод для тестирования неизменяемого дерева на основе исходного.
+    /// </summary>
+    public static void RunTestsWithImmutable<T>(ITree<T> baseTree) where T : IComparable<T>
+    {
+        Console.WriteLine(new string('=', 60));
+        Console.WriteLine("Тестирование замороженного дерева (UnmutableTree)");
+        Console.WriteLine(new string('=', 60));
+        Console.WriteLine();
+
+        var immutableTree = new UnmutableTree<T>(baseTree);
+        RunTests(immutableTree, baseTree.Nodes);
+    }
+}

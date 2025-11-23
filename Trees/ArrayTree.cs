@@ -12,7 +12,7 @@ namespace TreeLibrary.Trees;
 // Размер массива увеличивается автоматически путём удвоения
 public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 {
-    private T?[] _array = [];
+    private T?[] _array = new T?[4];
     public int Count { get; private set; }
     public bool IsEmpty => Count == 0;
     public IEnumerable<T> Nodes => _array;

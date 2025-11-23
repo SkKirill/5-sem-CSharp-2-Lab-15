@@ -183,10 +183,15 @@ public class LinkedTree<T> : ITree<T> where T : IComparable<T>
         return node;
     }
 
-    private class Node<TNode>(TNode value)
+    private class Node<TNode>
     {
-        public TNode Value { get; set; } = value;
+        public TNode Value { get; set; }
         public Node<TNode>? Left { get; set; }
         public Node<TNode>? Right { get; set; }
+
+        public Node(TNode value)
+        {
+            Value = value;
+        }
     }
 }

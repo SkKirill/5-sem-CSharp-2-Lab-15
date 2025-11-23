@@ -3,11 +3,18 @@ using TreeLibrary.Exceptions;
 
 namespace TreeLibrary.Trees;
 
-public class UnmutableTree<T>(ITree<T> tree) : ITree<T> where T : IComparable<T>
+public class UnmutableTree<T> : ITree<T> where T : IComparable<T>
 {
-    public int Count => tree.Count;
-    public bool IsEmpty => tree.IsEmpty;
-    public IEnumerable<T> Nodes => tree;
+    private readonly ITree<T> _tree;
+    
+    public int Count => _tree.Count;
+    public bool IsEmpty => _tree.IsEmpty;
+    public IEnumerable<T> Nodes => _tree;
+
+    public UnmutableTree(ITree<T> tree)
+    {
+        _tree = tree;
+    }
 
     public void Add(T node)
     {
@@ -21,12 +28,12 @@ public class UnmutableTree<T>(ITree<T> tree) : ITree<T> where T : IComparable<T>
 
     public bool Contains(T node)
     {
-        return tree.Contains(node);
+        return _tree.Contains(node);
     }
 
     public bool Contains(ITree<T> tree1)
     {
-        return tree.Contains(tree1);
+        return _tree.Contains(tree1);
     }
 
     public void Remove(T node)
@@ -36,7 +43,7 @@ public class UnmutableTree<T>(ITree<T> tree) : ITree<T> where T : IComparable<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        return tree.GetEnumerator();
+        return _tree.GetEnumerator();
     }
     IEnumerator IEnumerable.GetEnumerator()
     {
