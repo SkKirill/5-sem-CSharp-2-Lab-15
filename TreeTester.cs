@@ -6,47 +6,6 @@ namespace TreeLibrary;
 public static class TreeTester
 {
     /// <summary>
-    /// Метод выполняет команду над деревом, логируя процесс и результат.
-    /// </summary>
-    private static void ExecuteCommand<T>(ITree<T> tree, string commandName, Action<ITree<T>> action) 
-        where T : IComparable<T>
-    {
-        Console.WriteLine(new string('-', 60));
-        Console.WriteLine($"Попытка выполнить команду: {commandName}");
-        Console.WriteLine($"Тип дерева: {tree.GetType().Name}");
-        Console.WriteLine("Состояние дерева ДО выполнения:");
-        PrintTree(tree);
-
-        try
-        {
-            action(tree);
-            Console.WriteLine($"Команда '{commandName}' выполнена успешно!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Обработана ошибка при выполнении '{commandName}': {ex.Message}");
-        }
-
-        Console.WriteLine("Состояние дерева ПОСЛЕ выполнения:");
-        PrintTree(tree);
-        Console.WriteLine(new string('-', 60));
-        Console.WriteLine();
-    }
-
-    /// <summary>
-    /// Печатает элементы дерева.
-    /// </summary>
-    private static void PrintTree<T>(ITree<T> tree) where T : IComparable<T>
-    {
-        if (tree.IsEmpty)
-        {
-            Console.WriteLine($"[Дерево пустое]: {tree.IsEmpty}");
-            return;
-        }
-        Console.WriteLine($"Элементы ({tree.Count} шт.): {string.Join(", ", tree.Nodes)}");
-    }
-
-    /// <summary>
     /// Метод запускает полный набор тестов для конкретного дерева.
     /// </summary>
     public static void RunTests<T>(ITree<T> tree, IEnumerable<T> sampleData) where T : IComparable<T>
@@ -114,5 +73,46 @@ public static class TreeTester
 
         var immutableTree = new UnmutableTree<T>(baseTree);
         RunTests(immutableTree, baseTree.Nodes);
+    }
+
+    /// <summary>
+    /// Метод выполняет команду над деревом, логируя процесс и результат.
+    /// </summary>
+    private static void ExecuteCommand<T>(ITree<T> tree, string commandName, Action<ITree<T>> action) 
+        where T : IComparable<T>
+    {
+        Console.WriteLine(new string('-', 60));
+        Console.WriteLine($"Попытка выполнить команду: {commandName}");
+        Console.WriteLine($"Тип дерева: {tree.GetType().Name}");
+        Console.WriteLine("Состояние дерева ДО выполнения:");
+        PrintTree(tree);
+
+        try
+        {
+            action(tree);
+            Console.WriteLine($"Команда '{commandName}' выполнена успешно!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Обработана ошибка при выполнении '{commandName}': {ex.Message}");
+        }
+
+        Console.WriteLine("Состояние дерева ПОСЛЕ выполнения:");
+        PrintTree(tree);
+        Console.WriteLine(new string('-', 60));
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// Печатает элементы дерева.
+    /// </summary>
+    private static void PrintTree<T>(ITree<T> tree) where T : IComparable<T>
+    {
+        if (tree.IsEmpty)
+        {
+            Console.WriteLine($"[Дерево пустое]: {tree.IsEmpty}");
+            return;
+        }
+        Console.WriteLine($"Элементы ({tree.Count} шт.): {string.Join(", ", tree.Nodes)}");
     }
 }
