@@ -10,7 +10,7 @@ namespace TreeLibrary.Trees;
 // • правый потомок = 2*i + 2
 // • левый < корень < правый
 // Размер массива увеличивается автоматически путём удвоения
-public class ArrayTree<T> : ITree<T> where T : IComparable<T>
+public class ArrayTree<T> : ITree<T> where T : IComparable<T> // крутой класс
 {
     private T?[] _array = new T?[4];
     public int Count { get; private set; }
