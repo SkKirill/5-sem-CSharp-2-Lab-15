@@ -8,7 +8,8 @@ public static class TreeTester
     /// <summary>
     /// Метод выполняет команду над деревом, логируя процесс и результат.
     /// </summary>
-    private static void ExecuteCommand<T>(ITree<T> tree, string commandName, Action<ITree<T>> action) where T : IComparable<T>
+    private static void ExecuteCommand<T>(ITree<T> tree, string commandName, Action<ITree<T>> action) 
+        where T : IComparable<T>
     {
         Console.WriteLine(new string('-', 60));
         Console.WriteLine($"Попытка выполнить команду: {commandName}");
@@ -39,12 +40,10 @@ public static class TreeTester
     {
         if (tree.IsEmpty)
         {
-            Console.WriteLine("[Дерево пустое]");
+            Console.WriteLine($"[Дерево пустое]: {tree.IsEmpty}");
+            return;
         }
-        else
-        {
-            Console.WriteLine($"Элементы ({tree.Count} шт.): {string.Join(", ", tree.Nodes)}");
-        }
+        Console.WriteLine($"Элементы ({tree.Count} шт.): {string.Join(", ", tree.Nodes)}");
     }
 
     /// <summary>
@@ -67,7 +66,7 @@ public static class TreeTester
         foreach (var item in sampleData)
         {
             ExecuteCommand(tree, $"Contains({item})", t => {
-                bool exists = t.Contains(item);
+                var exists = t.Contains(item);
                 Console.WriteLine($"Contains({item}) = {exists}");
             });
         }
@@ -80,12 +79,12 @@ public static class TreeTester
 
         // 4. Проверка утилит TreeUtils
         ExecuteCommand(tree, "TreeUtils.Exists(x => true)", t => {
-            bool any = TreeUtils<T>.Exists(t, x => true);
+            var any = TreeUtils<T>.Exists(t, x => true);
             Console.WriteLine($"TreeUtils.Exists = {any}");
         });
 
         ExecuteCommand(tree, "TreeUtils.CheckForAll(x => true)", t => {
-            bool all = TreeUtils<T>.CheckForAll(t, x => true);
+            var all = TreeUtils<T>.CheckForAll(t, x => true);
             Console.WriteLine($"TreeUtils.CheckForAll = {all}");
         });
 
