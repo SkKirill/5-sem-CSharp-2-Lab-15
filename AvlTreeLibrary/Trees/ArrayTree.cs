@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using TreeLibrary.Exceptions;
+using TreeLibrary.Trees;
 
-namespace TreeLibrary.Trees;
+namespace AvlTreeLibrary.Trees;
 
 // Бинарное дерево поиска, реализованное с использованием массива (как структура кучи)
 // Правила:

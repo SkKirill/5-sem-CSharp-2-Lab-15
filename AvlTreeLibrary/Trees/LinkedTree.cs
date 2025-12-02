@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using TreeLibrary.Exceptions;
+using TreeLibrary.Trees;
 
-namespace TreeLibrary.Trees;
+namespace AvlTreeLibrary.Trees;
 
 public class LinkedTree<T> : ITree<T> where T : IComparable<T>
 {
@@ -182,16 +183,11 @@ public class LinkedTree<T> : ITree<T> where T : IComparable<T>
             node = node.Left;
         return node;
     }
+}
 
-    private class Node<TNode>
-    {
-        public TNode Value { get; set; }
-        public Node<TNode>? Left { get; set; }
-        public Node<TNode>? Right { get; set; }
-
-        public Node(TNode value)
-        {
-            Value = value;
-        }
-    }
+public class Node<TNode>(TNode value)
+{
+    public TNode Value { get; set; } = value;
+    public Node<TNode>? Left { get; set; }
+    public Node<TNode>? Right { get; set; }
 }

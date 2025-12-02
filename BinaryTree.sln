@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeLibrary", "TreeLibrary.csproj", "{B800D165-8448-4490-96D1-6F3E75A03883}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeViewForm", "TreeViewForm\TreeViewForm.csproj", "{A5B76E80-5166-4C14-B100-A28A81431F5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvlTreeLibrary", "AvlTreeLibrary\AvlTreeLibrary.csproj", "{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B800D165-8448-4490-96D1-6F3E75A03883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B800D165-8448-4490-96D1-6F3E75A03883}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B800D165-8448-4490-96D1-6F3E75A03883}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B800D165-8448-4490-96D1-6F3E75A03883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5B76E80-5166-4C14-B100-A28A81431F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B76E80-5166-4C14-B100-A28A81431F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B76E80-5166-4C14-B100-A28A81431F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B76E80-5166-4C14-B100-A28A81431F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

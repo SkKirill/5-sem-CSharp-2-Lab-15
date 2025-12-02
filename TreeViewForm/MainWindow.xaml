@@ -1,0 +1,118 @@
+﻿<Window x:Class="TreeViewForm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:TreeViewForm.Models"
+        mc:Ignorable="d"
+        Title="MainWindow">
+    <Window.DataContext>
+        <models:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Margin="5"
+                Width="Auto"
+                Height="Auto"
+                Content="Введите параметр:" />
+            <TextBox
+                Grid.Column="1"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                Text="{Binding TextBoxValue}" />
+
+            <ComboBox
+                Grid.Column="2"
+                Margin="5"
+                ItemsSource="{Binding ComboBoxItems}" 
+                SelectedItem="{Binding SelectTypeTree}"/>
+            
+            <ComboBox
+                Grid.Column="3"
+                Margin="5"
+                ItemsSource="{Binding ComboBoxTreesItems}" 
+                SelectedItem="{Binding SelectedTrees}"/>
+
+        </Grid>
+
+        <StackPanel
+            VerticalAlignment="Stretch"
+            Grid.Row="1"
+            Orientation="Vertical">
+            <Label
+                Padding="0"
+                Margin="10 0 0 0 "
+                Content="Кнопки для выполнение функций:" />
+            <Border
+                VerticalAlignment="Stretch"
+                Padding="0"
+                Margin="3"
+                BorderBrush="Black"
+                BorderThickness="1"
+                CornerRadius="8">
+                <WrapPanel
+                    Orientation="Horizontal">
+                    <Button
+                        Margin="10"
+                        Command="{Binding AddCommand}"
+                        Content="Добавить">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding DeleteCommand}"
+                        Content="Удалить">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding ContainsCommand}"
+                        Content="Найти">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding ExistsCommand}"
+                        Content="TreeUtils.Exists(x => x.CompareTo(testItem) > 0)">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding CheckForAllCommand}"
+                        Content="TreeUtils.CheckForAll(x => x.CompareTo(testItem) > 0)">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding FindAllCommand}"
+                        Content="TreeUtils.FindAll(x => x.CompareTo(testItem) > 0)">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding ForEachCommand}"
+                        Content="TreeUtils.ForEach(x => if (x.CompareTo(testItem) > 0)">
+                    </Button>
+                    <Button
+                        Margin="10"
+                        Command="{Binding ShowCommand}"
+                        Content="Вывод">
+                    </Button>
+                </WrapPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
