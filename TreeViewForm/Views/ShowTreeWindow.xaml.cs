@@ -12,8 +12,7 @@ public partial class ShowTreeWindow : Window
 {
     private readonly ITree<string> _treeString;
     private readonly ITree<int> _treeInt;
-    
-    
+
     public ShowTreeWindow(ITree<string> treeString = null, ITree<int> treeInt = null)
     {
         InitializeComponent();
@@ -23,16 +22,31 @@ public partial class ShowTreeWindow : Window
             if (treeString != null)
             {
                 var root = GetRoot(treeString);
-                DrawTree(root, 400, 40);
+                MeasureSubtree(root);
+
+                double centerX = root.SubtreeWidth / 2 + 40;
+                TreeCanvas.Width = root.SubtreeWidth + 80;
+
+                DrawTree(root, centerX, 40);
             }
+
             if (treeInt != null)
             {
                 var root = GetRoot(treeInt);
-                DrawTree(root, 400, 40);
+                MeasureSubtree(root);
+
+                double centerX = root.SubtreeWidth / 2 + 40;
+                TreeCanvas.Width = root.SubtreeWidth + 80;
+
+                DrawTree(root, centerX, 40);
             }
         };
     }
-    
+
+    // -----------------------------------------------------------
+    // Получение корня дерева
+    // -----------------------------------------------------------
+
     private VisualNode<T>? GetRoot<T>(ITree<T> tree)
         where T : IComparable<T>
     {
@@ -50,7 +64,7 @@ public partial class ShowTreeWindow : Window
 
         return null;
     }
-    
+
     private VisualNode<T>? ConvertLinked<T>(Node<T>? node)
     {
         if (node == null) return null;
@@ -62,9 +76,9 @@ public partial class ShowTreeWindow : Window
             Right = ConvertLinked(node.Right)
         };
     }
-    
+
     private VisualNode<T>? ConvertArray<T>(ArrayTree<T> tree)
-        where T : IComparable<T> 
+        where T : IComparable<T>
     {
         return BuildArrayNode(tree, 0);
     }
@@ -72,7 +86,7 @@ public partial class ShowTreeWindow : Window
     private VisualNode<T>? BuildArrayNode<T>(ArrayTree<T> tree, int index)
         where T : IComparable<T>
     {
-        var arrField = typeof(ArrayTree<T>).GetField("_array", 
+        var arrField = typeof(ArrayTree<T>).GetField("_array",
             BindingFlags.NonPublic | BindingFlags.Instance);
 
         var arr = (T?[])arrField!.GetValue(tree);
@@ -83,59 +97,100 @@ public partial class ShowTreeWindow : Window
         return new VisualNode<T>
         {
             Value = arr[index]!,
-            Left  = BuildArrayNode(tree, index * 2 + 1),
+            Left = BuildArrayNode(tree, index * 2 + 1),
             Right = BuildArrayNode(tree, index * 2 + 2)
         };
     }
-    
-    private const double NodeRadius = 20;
-    private const double HorizontalSpacing = 40;
-    private const double VerticalSpacing = 60;
+
+    // -----------------------------------------------------------
+    // Измерение ширины поддерева
+    // -----------------------------------------------------------
+
+    private double MeasureSubtree<T>(VisualNode<T>? node)
+    {
+        if (node == null) return 0;
+
+        // размер текста
+        string txt = node.Value!.ToString();
+        var tb = new TextBlock { Text = txt, FontSize = 14 };
+        tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        double textWidth = tb.DesiredSize.Width;
+
+        double radius = Math.Max(20, textWidth / 2 + 10);
+        double nodeWidth = radius * 2 + 40; // запас по бокам
+
+        // рекурсивно считаем ширины детей
+        double left = MeasureSubtree(node.Left);
+        double right = MeasureSubtree(node.Right);
+
+        double total = Math.Max(nodeWidth, left + right);
+        node.SubtreeWidth = total;
+
+        return total;
+    }
+
+    // -----------------------------------------------------------
+    // Рисование
+    // -----------------------------------------------------------
 
     private void DrawTree<T>(VisualNode<T>? node, double x, double y)
     {
         if (node == null) return;
 
-        // Рисуем окружность
-        var circle = new Ellipse
+        string textValue = node.Value!.ToString();
+
+        var tb = new TextBlock { Text = textValue, FontSize = 14 };
+        tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        double textWidth = tb.DesiredSize.Width;
+
+        double radius = Math.Max(20, textWidth / 2 + 10);
+
+        // Овал
+        var ellipse = new Ellipse
         {
-            Width = NodeRadius * 2,
-            Height = NodeRadius * 2,
+            Width = radius * 2,
+            Height = radius * 2,
             Stroke = Brushes.Black,
             Fill = Brushes.LightYellow,
             StrokeThickness = 2
         };
-        Canvas.SetLeft(circle, x - NodeRadius);
-        Canvas.SetTop(circle, y - NodeRadius);
-        TreeCanvas.Children.Add(circle);
+        Canvas.SetLeft(ellipse, x - radius);
+        Canvas.SetTop(ellipse, y - radius);
+        TreeCanvas.Children.Add(ellipse);
 
-        // Подпись
-        var text = new TextBlock
-        {
-            Text = node.Value!.ToString(),
-            FontSize = 14
-        };
-        Canvas.SetLeft(text, x - 10);
-        Canvas.SetTop(text, y - 10);
-        TreeCanvas.Children.Add(text);
+        // Текст
+        var txt = new TextBlock { Text = textValue, FontSize = 14 };
+        Canvas.SetLeft(txt, x - textWidth / 2);
+        Canvas.SetTop(txt, y - 10);
+        TreeCanvas.Children.Add(txt);
 
-        // Линии -> потомки
+        // Расстояние по вертикали
+        double nextY = y + radius + 60;
+
+        // Левый ребенок
         if (node.Left != null)
         {
-            DrawLine(x, y, x - HorizontalSpacing, y + VerticalSpacing);
-            DrawTree(node.Left, x - HorizontalSpacing, y + VerticalSpacing);
+            double rightWidth = node.Right?.SubtreeWidth ?? 0;
+            double leftX = x - rightWidth / 2;
+
+            DrawLine(x, y + radius, leftX, nextY - radius);
+            DrawTree(node.Left, leftX, nextY);
         }
 
+        // Правый ребенок
         if (node.Right != null)
         {
-            DrawLine(x, y, x + HorizontalSpacing, y + VerticalSpacing);
-            DrawTree(node.Right, x + HorizontalSpacing, y + VerticalSpacing);
+            double leftWidth = node.Left?.SubtreeWidth ?? 0;
+            double rightX = x + leftWidth / 2;
+
+            DrawLine(x, y + radius, rightX, nextY - radius);
+            DrawTree(node.Right, rightX, nextY);
         }
     }
 
     private void DrawLine(double x1, double y1, double x2, double y2)
     {
-        var line = new System.Windows.Shapes.Line
+        var line = new Line
         {
             X1 = x1,
             Y1 = y1,

@@ -5,6 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:TreeViewForm.Models"
         mc:Ignorable="d"
+        MinHeight="318"
+        MaxHeight="318"
+        MinWidth="400"
+        MaxWidth="480"
         Title="MainWindow">
     <Window.DataContext>
         <models:MainWindowViewModel />

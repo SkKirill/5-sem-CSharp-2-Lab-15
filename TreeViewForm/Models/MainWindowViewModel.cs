@@ -17,7 +17,6 @@ public class MainWindowViewModel : BaseViewModel
     private ITree<string> _stringTreeLinked = new LinkedTree<string>();
     private ITree<string> _stringTreeArray = new ArrayTree<string>();
 
-
     // ——————————————————————————————
     //     ВЫБОР ИЗ COMBOBOX
     // ——————————————————————————————
@@ -33,35 +32,34 @@ public class MainWindowViewModel : BaseViewModel
     [
         "linked",
         "array",
-        "immutable"   // пока не реализовано
+        "immutable"
     ];
 
     public string SelectTypeTree { get; set; } = "int";
     public string SelectedTrees { get; set; } = "linked";
 
-
     // ——————————————————————————————
     // ВСПОМОГАТЕЛЬНЫЙ МЕТОД: выбрать нужное дерево
     // ——————————————————————————————
-    private ITree<T> GetTree<T>()
-        where T : IComparable<T> 
+    private ITree<T> GetTree<T>() where T : IComparable<T>
     {
         if (typeof(T) == typeof(int))
         {
             return SelectedTrees switch
             {
                 "linked" => (ITree<T>)_intTreeLinked,
-                "array"  => (ITree<T>)_intTreeArray,
-                _        => throw new NotImplementedException("immutable ещё не реализован")
+                "array" => (ITree<T>)_intTreeArray,
+                "immutable" => new UnmutableTree<T>((ITree<T>)_intTreeLinked)
             };
         }
-        else if (typeof(T) == typeof(string))
+
+        if (typeof(T) == typeof(string))
         {
             return SelectedTrees switch
             {
                 "linked" => (ITree<T>)_stringTreeLinked,
-                "array"  => (ITree<T>)_stringTreeArray,
-                _        => throw new NotImplementedException("immutable ещё не реализован")
+                "array" => (ITree<T>)_stringTreeArray,
+                "immutable" => new UnmutableTree<T>((ITree<T>)_stringTreeArray)
             };
         }
 
@@ -72,15 +70,14 @@ public class MainWindowViewModel : BaseViewModel
     // ——————————————————————————————
     //              КОМАНДЫ
     // ——————————————————————————————
-    public ICommand AddCommand         => new RelayCommand(_ => Add());
-    public ICommand DeleteCommand      => new RelayCommand(_ => Delete());
-    public ICommand ContainsCommand    => new RelayCommand(_ => Contains());
-    public ICommand ExistsCommand      => new RelayCommand(_ => Exists());
+    public ICommand AddCommand => new RelayCommand(_ => Add());
+    public ICommand DeleteCommand => new RelayCommand(_ => Delete());
+    public ICommand ContainsCommand => new RelayCommand(_ => Contains());
+    public ICommand ExistsCommand => new RelayCommand(_ => Exists());
     public ICommand CheckForAllCommand => new RelayCommand(_ => CheckForAll());
-    public ICommand FindAllCommand     => new RelayCommand(_ => FindAll());
-    public ICommand ForEachCommand     => new RelayCommand(_ => ForEach());
-    public ICommand ShowCommand        => new RelayCommand(_ => Show());
-
+    public ICommand FindAllCommand => new RelayCommand(_ => FindAll());
+    public ICommand ForEachCommand => new RelayCommand(_ => ForEach());
+    public ICommand ShowCommand => new RelayCommand(_ => Show());
 
     // ——————————————————————————————
     //         ОБРАБОТКА ДАННЫХ
@@ -148,6 +145,7 @@ public class MainWindowViewModel : BaseViewModel
                     MessageBox.Show("Введите число");
                     return;
                 }
+
                 result = GetTree<int>().Contains(v);
             }
             else
@@ -156,7 +154,6 @@ public class MainWindowViewModel : BaseViewModel
             }
 
             MessageBox.Show(result ? "Есть" : "Нет");
-
         }
         catch (Exception ex)
         {
@@ -172,20 +169,20 @@ public class MainWindowViewModel : BaseViewModel
         {
             if (SelectTypeTree == "int")
             {
-                if (!int.TryParse(TextBoxValue, out int v))
+                if (!int.TryParse(TextBoxValue, out var v))
                 {
                     MessageBox.Show("Введите число");
                     return;
                 }
 
-                bool result = GetTree<int>().Any(x => x > v);
+                var result = GetTree<int>().Any(x => x > v);
 
                 MessageBox.Show(result ? "Да, есть" : "Нет");
             }
             else
             {
                 var tree = GetTree<string>();
-                bool result = tree.Any(x => x.Contains(TextBoxValue));
+                var result = tree.Any(x => x.Contains(TextBoxValue));
                 MessageBox.Show(result ? "Есть" : "Нет");
             }
         }
@@ -208,13 +205,13 @@ public class MainWindowViewModel : BaseViewModel
                     return;
                 }
 
-                bool result = GetTree<int>().All(x => x > v);
+                var result = GetTree<int>().All(x => x > v);
                 MessageBox.Show(result ? "Все подходят" : "Не все");
             }
             else
             {
                 var tree = GetTree<string>();
-                bool result = tree.All(x => x.Contains(TextBoxValue));
+                var result = tree.All(x => x.Contains(TextBoxValue));
                 MessageBox.Show(result ? "Все подходят" : "Не все");
             }
         }
@@ -288,7 +285,7 @@ public class MainWindowViewModel : BaseViewModel
             }
             else
             {
-                var window = new ShowTreeWindow(GetTree<string>(), null);
+                var window = new ShowTreeWindow(GetTree<string>());
                 window.ShowDialog();
             }
         }

@@ -13,21 +13,25 @@ namespace AvlTreeLibrary.Trees;
 // Размер массива увеличивается автоматически путём удвоения
 public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 {
-    private T?[] _array = new T?[4];
+    private T[] _array = new T[4];
+    private bool[] _arrayIsValue = new bool[4];
     public int Count { get; private set; }
     public bool IsEmpty => Count == 0;
+
     public IEnumerable<T> Nodes
     {
         get
         {
             var list = new List<T>();
-            foreach (var node in _array)
+            for (var index = 0; index < _array.Length; index++)
             {
-                if (node is not null)
+                var node = _array[index];
+                if (_arrayIsValue[index])
                 {
                     list.Add(node);
                 }
             }
+
             return list;
         }
     }
@@ -41,6 +45,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
         if (Count == 0)
         {
             _array[0] = item;
+            _arrayIsValue[0] = true;
             Count = 1;
             return;
         }
@@ -56,9 +61,10 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
                 {
                     var left = 2 * index + 1;
                     EnsureCapacity(left);
-                    if (Equals(_array[left], null))
+                    if (!_arrayIsValue[left])
                     {
                         _array[left] = item;
+                        _arrayIsValue[left] = true;
                         Count++;
                         return;
                     }
@@ -70,9 +76,10 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
                 {
                     var right = 2 * index + 2;
                     EnsureCapacity(right);
-                    if (Equals(_array[right], null))
+                    if (!_arrayIsValue[right])
                     {
                         _array[right] = item;
+                        _arrayIsValue[right] = true;
                         Count++;
                         return;
                     }
@@ -89,6 +96,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
     public void Clear()
     {
         _array = new T[4];
+        _arrayIsValue = new bool[4];
         Count = 0;
     }
 
@@ -101,7 +109,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
         while (index < _array.Length)
         {
             var cmp = item.CompareTo(_array[index]);
-            if (Equals(_array[index], null))
+            if (!_arrayIsValue[index])
                 return false;
 
             switch (cmp)
@@ -131,6 +139,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
             if (!Equals(node, null) && !Contains(node))
                 return false;
         }
+
         return true;
     }
 
@@ -149,7 +158,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
             switch (cmp)
             {
                 case 0:
-                    _array[index] = default;
+                    _arrayIsValue[index] = false;
                     Count--;
                     var rebase = new List<T>();
                     CutBranch(ref rebase, index);
@@ -157,6 +166,7 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
                     {
                         Add(node);
                     }
+
                     return;
                 case < 0:
                     index = 2 * index + 1;
@@ -172,13 +182,12 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (var t in _array)
+        for (var index = 0; index < _array.Length; index++)
         {
-            if (!Equals(t, null)) 
+            if (_arrayIsValue[index])
                 continue;
 
-            if (t != null)
-                yield return t;
+            yield return _array[index];
         }
     }
 
@@ -189,21 +198,21 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 
     private void CutBranch(ref List<T> list, int index)
     {
-        if (2 * index + 1 < Count && _array[2 * index + 1] is not null)
+        if (2 * index + 1 < Count && _arrayIsValue[2 * index + 1])
         {
-            list.Add(_array[2 * index + 1]!);
-            _array[2 * index + 1] = default;
+            list.Add(_array[2 * index + 1]);
+            _arrayIsValue[2 * index + 1] = false;
             CutBranch(ref list, 2 * index + 1);
         }
 
-        if (2 * index + 2 < Count && _array[2 * index + 1] is not null)
+        if (2 * index + 2 < Count && _arrayIsValue[2 * index + 1])
         {
             list.Add(_array[2 * index + 2]!);
-            _array[2 * index + 2] = default;
+            _arrayIsValue[2 * index + 2] = false;
             CutBranch(ref list, 2 * index + 2);
         }
     }
-    
+
     private void EnsureCapacity(int index)
     {
         if (index < _array.Length)
@@ -214,5 +223,6 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
             newSize *= 2;
 
         Array.Resize(ref _array, newSize);
+        Array.Resize(ref _arrayIsValue, newSize);
     }
 }
