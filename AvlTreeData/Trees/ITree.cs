@@ -1,6 +1,8 @@
-﻿namespace TreeLibrary.Trees;
+﻿using AvlTreeData.Services;
 
-public interface ITree<T> : IEnumerable<T> where T : IComparable<T>
+namespace AvlTreeData.Trees;
+
+public interface ITree<T> : IEnumerable<T>, IDrawTree<T> where T : IComparable<T>
 {
     int Count { get; }
     bool IsEmpty { get; }

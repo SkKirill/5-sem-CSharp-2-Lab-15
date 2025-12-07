@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeViewForm", "TreeViewFor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvlTreeLibrary", "AvlTreeLibrary\AvlTreeLibrary.csproj", "{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvlTreeData", "AvlTreeData\AvlTreeData.csproj", "{4BFD3167-1F79-452C-9666-6EA998882FB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FFF6A49-1612-4E5E-96B0-2D5CBF5358E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BFD3167-1F79-452C-9666-6EA998882FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BFD3167-1F79-452C-9666-6EA998882FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BFD3167-1F79-452C-9666-6EA998882FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BFD3167-1F79-452C-9666-6EA998882FB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

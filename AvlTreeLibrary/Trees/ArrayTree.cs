@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using AvlTreeData.Services;
+using AvlTreeData.Trees;
+using AvlTreeData.Views;
 using TreeLibrary.Exceptions;
-using TreeLibrary.Trees;
 
 namespace AvlTreeLibrary.Trees;
 
@@ -179,6 +181,8 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 
         throw new TreeItemNotFoundException();
     }
+    
+    
 
     public IEnumerator<T> GetEnumerator()
     {
@@ -224,5 +228,23 @@ public class ArrayTree<T> : ITree<T> where T : IComparable<T>
 
         Array.Resize(ref _array, newSize);
         Array.Resize(ref _arrayIsValue, newSize);
+    }
+
+    public VisualNode<T>? ConvertToVisualNode()
+    {
+        return IsEmpty ? null : BuildArrayNode( 0);
+    }
+
+    private VisualNode<T>? BuildArrayNode(int index)
+    {
+        if (index > _arrayIsValue.Length || !_arrayIsValue[index])
+            return null;
+
+        return new VisualNode<T>
+        {
+            Value = _array[index],
+            Left = BuildArrayNode(index * 2 + 1),
+            Right = BuildArrayNode(index * 2 + 2)
+        };
     }
 }

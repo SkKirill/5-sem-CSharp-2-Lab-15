@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using AvlTreeData.Services;
+using AvlTreeData.Trees;
+using AvlTreeData.Views;
 using TreeLibrary.Exceptions;
-using TreeLibrary.Trees;
 
 namespace AvlTreeLibrary.Trees;
 
@@ -172,7 +174,7 @@ public class LinkedTree<T> : ITree<T> where T : IComparable<T>
         }
 
         if (node.Right == null) yield break;
-        
+
         foreach (var value in Traverse(node.Right))
             yield return value;
     }
@@ -183,11 +185,28 @@ public class LinkedTree<T> : ITree<T> where T : IComparable<T>
             node = node.Left;
         return node;
     }
-}
 
-public class Node<TNode>(TNode value)
-{
-    public TNode Value { get; set; } = value;
-    public Node<TNode>? Left { get; set; }
-    public Node<TNode>? Right { get; set; }
+    public VisualNode<T>? ConvertToVisualNode()
+    {
+        return BuildLinkedNode(_root);
+    }
+
+    private VisualNode<T>? BuildLinkedNode(Node<T>? node)
+    {
+        if (node == null) return null;
+
+        return new VisualNode<T>
+        {
+            Value = node.Value,
+            Left = BuildLinkedNode(node.Left),
+            Right = BuildLinkedNode(node.Right)
+        };
+    }
+
+    private class Node<TNode>(TNode value)
+    {
+        public TNode Value { get; set; } = value;
+        public Node<TNode>? Left { get; set; }
+        public Node<TNode>? Right { get; set; }
+    }
 }

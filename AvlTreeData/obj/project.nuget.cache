@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0gPWMJBfI0o=",
+  "dgSpecHash": "hhsoHA7hQOc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\kirux\\RiderProjects\\5-sem-CSharp-2-Lab-15\\AvlTreeLibrary\\AvlTreeLibrary.csproj",
+  "projectFilePath": "C:\\Users\\kirux\\RiderProjects\\5-sem-CSharp-2-Lab-15\\AvlTreeData\\AvlTreeData.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kirux\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.15\\microsoft.netcore.app.ref.8.0.15.nupkg.sha512",
     "C:\\Users\\kirux\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.15\\microsoft.windowsdesktop.app.ref.8.0.15.nupkg.sha512",

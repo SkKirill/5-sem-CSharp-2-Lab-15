@@ -1,4 +1,4 @@
-﻿    namespace TreeViewForm.Views;
+﻿    namespace AvlTreeData.Views;
 
     public class VisualNode<T>
     {

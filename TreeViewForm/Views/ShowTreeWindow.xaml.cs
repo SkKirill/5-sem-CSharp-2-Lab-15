@@ -1,105 +1,39 @@
-﻿using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using AvlTreeLibrary.Trees;
-using TreeLibrary.Trees;
+using AvlTreeData.Trees;
+using AvlTreeData.Views;
 
 namespace TreeViewForm.Views;
 
 public partial class ShowTreeWindow : Window
 {
-    private readonly ITree<string> _treeString;
-    private readonly ITree<int> _treeInt;
-
-    public ShowTreeWindow(ITree<string> treeString = null, ITree<int> treeInt = null)
+    public ShowTreeWindow(ITree<string>? treeString = null, ITree<int>? treeInt = null)
     {
         InitializeComponent();
-
-        Loaded += (_, _) =>
+        
+        if (treeString is not null && !treeString.IsEmpty)
         {
-            if (treeString != null)
-            {
-                var root = GetRoot(treeString);
-                MeasureSubtree(root);
+            var root = treeString.ConvertToVisualNode();
+            MeasureSubtree(root);
 
-                double centerX = root.SubtreeWidth / 2 + 40;
-                TreeCanvas.Width = root.SubtreeWidth + 80;
+            var centerX = root!.SubtreeWidth / 2 + 40;
+            TreeCanvas.Width = root.SubtreeWidth + 80;
 
-                DrawTree(root, centerX, 40);
-            }
-
-            if (treeInt != null)
-            {
-                var root = GetRoot(treeInt);
-                MeasureSubtree(root);
-
-                double centerX = root.SubtreeWidth / 2 + 40;
-                TreeCanvas.Width = root.SubtreeWidth + 80;
-
-                DrawTree(root, centerX, 40);
-            }
-        };
-    }
-
-    // -----------------------------------------------------------
-    // Получение корня дерева
-    // -----------------------------------------------------------
-
-    private VisualNode<T>? GetRoot<T>(ITree<T> tree)
-        where T : IComparable<T>
-    {
-        if (tree is LinkedTree<T> linked)
-        {
-            var rootField = typeof(LinkedTree<T>).GetField("_root",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-
-            var root = (Node<T>?)rootField?.GetValue(linked);
-            return ConvertLinked(root);
+            DrawTree(root, centerX, 40);
         }
 
-        if (tree is ArrayTree<T> arr)
-            return ConvertArray(arr);
-
-        return null;
-    }
-
-    private VisualNode<T>? ConvertLinked<T>(Node<T>? node)
-    {
-        if (node == null) return null;
-
-        return new VisualNode<T>
+        if (treeInt is not null && !treeInt.IsEmpty)
         {
-            Value = node.Value,
-            Left = ConvertLinked(node.Left),
-            Right = ConvertLinked(node.Right)
-        };
-    }
+            var root = treeInt.ConvertToVisualNode();
+            MeasureSubtree(root);
 
-    private VisualNode<T>? ConvertArray<T>(ArrayTree<T> tree)
-        where T : IComparable<T>
-    {
-        return BuildArrayNode(tree, 0);
-    }
+            var centerX = root!.SubtreeWidth / 2 + 40;
+            TreeCanvas.Width = root.SubtreeWidth + 80;
 
-    private VisualNode<T>? BuildArrayNode<T>(ArrayTree<T> tree, int index)
-        where T : IComparable<T>
-    {
-        var arrField = typeof(ArrayTree<T>).GetField("_array",
-            BindingFlags.NonPublic | BindingFlags.Instance);
-
-        var arr = (T?[])arrField!.GetValue(tree);
-
-        if (index >= arr.Length || arr[index] == null)
-            return null;
-
-        return new VisualNode<T>
-        {
-            Value = arr[index]!,
-            Left = BuildArrayNode(tree, index * 2 + 1),
-            Right = BuildArrayNode(tree, index * 2 + 2)
-        };
+            DrawTree(root, centerX, 40);
+        }
     }
 
     // -----------------------------------------------------------
@@ -111,19 +45,19 @@ public partial class ShowTreeWindow : Window
         if (node == null) return 0;
 
         // размер текста
-        string txt = node.Value!.ToString();
+        var txt = node.Value!.ToString();
         var tb = new TextBlock { Text = txt, FontSize = 14 };
         tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-        double textWidth = tb.DesiredSize.Width;
+        var textWidth = tb.DesiredSize.Width;
 
-        double radius = Math.Max(20, textWidth / 2 + 10);
-        double nodeWidth = radius * 2 + 40; // запас по бокам
+        var radius = Math.Max(20, textWidth / 2 + 10);
+        var nodeWidth = radius * 2 + 40; // запас по бокам
 
         // рекурсивно считаем ширины детей
-        double left = MeasureSubtree(node.Left);
-        double right = MeasureSubtree(node.Right);
+        var left = MeasureSubtree(node.Left);
+        var right = MeasureSubtree(node.Right);
 
-        double total = Math.Max(nodeWidth, left + right);
+        var total = Math.Max(nodeWidth, left + right);
         node.SubtreeWidth = total;
 
         return total;
@@ -137,15 +71,15 @@ public partial class ShowTreeWindow : Window
     {
         if (node == null) return;
 
-        string textValue = node.Value!.ToString();
+        var textValue = node.Value!.ToString();
 
         var tb = new TextBlock { Text = textValue, FontSize = 14 };
         tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-        double textWidth = tb.DesiredSize.Width;
+        var textWidth = tb.DesiredSize.Width;
 
-        double radius = Math.Max(20, textWidth / 2 + 10);
+        var radius = Math.Max(20, textWidth / 2 + 10);
 
-        // Овал
+        // Рендер узла (овал)
         var ellipse = new Ellipse
         {
             Width = radius * 2,
@@ -164,29 +98,43 @@ public partial class ShowTreeWindow : Window
         Canvas.SetTop(txt, y - 10);
         TreeCanvas.Children.Add(txt);
 
-        // Расстояние по вертикали
-        double nextY = y + radius + 60;
+        var nextY = y + radius + 60;
 
-        // Левый ребенок
-        if (node.Left != null)
+        var hasLeft = node.Left != null;
+        var hasRight = node.Right != null;
+
+        // --- ЕДИНСТВЕННЫЙ РЕБЁНОК: смещаем в сторону ---
+        const double singleOffset = 20;
+
+        // Левый ребёнок
+        if (hasLeft)
         {
-            double rightWidth = node.Right?.SubtreeWidth ?? 0;
-            double leftX = x - rightWidth / 2;
+            double leftX;
+
+            if (!hasRight) // только ЛЕВЫЙ ребёнок
+                leftX = x - singleOffset;
+            else // оба ребёнка
+                leftX = x - (node.Right?.SubtreeWidth ?? 0) / 2 - singleOffset*2;
 
             DrawLine(x, y + radius, leftX, nextY - radius);
             DrawTree(node.Left, leftX, nextY);
         }
 
-        // Правый ребенок
-        if (node.Right != null)
+        // Правый ребёнок
+        if (hasRight)
         {
-            double leftWidth = node.Left?.SubtreeWidth ?? 0;
-            double rightX = x + leftWidth / 2;
+            double rightX;
+
+            if (!hasLeft) // только ПРАВЫЙ ребёнок
+                rightX = x + singleOffset;
+            else // оба ребёнка
+                rightX = x + (node.Left?.SubtreeWidth ?? 0) / 2 + singleOffset*2;
 
             DrawLine(x, y + radius, rightX, nextY - radius);
             DrawTree(node.Right, rightX, nextY);
         }
     }
+
 
     private void DrawLine(double x1, double y1, double x2, double y2)
     {

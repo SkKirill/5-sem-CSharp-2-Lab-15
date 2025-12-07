@@ -1,8 +1,8 @@
-﻿using AvlTreeLibrary.Trees;
+﻿using AvlTreeData.Trees;
+using AvlTreeLibrary.Trees;
 using TreeLibrary.Exceptions;
-using TreeLibrary.Trees;
 
-namespace TreeLibrary.Utilities;
+namespace AvlTreeLibrary.Utilities;
 
 /// <summary>
 /// Делегат проверки элемента дерева.

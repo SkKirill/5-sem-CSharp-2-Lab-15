@@ -1,7 +1,10 @@
 ﻿using System.Collections;
+using AvlTreeData.Services;
+using AvlTreeData.Trees;
+using AvlTreeData.Views;
 using TreeLibrary.Exceptions;
 
-namespace TreeLibrary.Trees;
+namespace AvlTreeLibrary.Trees;
 
 public class UnmutableTree<T> : ITree<T> where T : IComparable<T>
 {
@@ -48,5 +51,10 @@ public class UnmutableTree<T> : ITree<T> where T : IComparable<T>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public VisualNode<T>? ConvertToVisualNode()
+    {
+        return _tree.ConvertToVisualNode();
     }
 }
